@@ -1,26 +1,26 @@
+import { useCallback, useEffect, useState } from "react";
+
 import { createPortal } from "react-dom";
 
 import ToastMessage from "./ToastMessage";
 
+import { toastEventManager } from "utils/toast";
+
 import * as S from "./styles";
-import { useCallback, useEffect, useState } from "react";
 
 export default function Toast() {
   const [toastInfo, setToastInfo] = useState([]);
 
   const handleAddToast = useCallback((event) => {
-    const { type, message } = event.detail;
+    const { type, message } = event;
     setToastInfo((prev) => [...prev, { id: Math.random(), type, message }]);
   }, []);
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      document.addEventListener("addtoast", handleAddToast);
-    }, 3000);
+    toastEventManager.on("addtoast", handleAddToast);
 
     return () => {
-      document.removeEventListener("addtoast", handleAddToast);
-      clearTimeout(handler);
+      toastEventManager.removeListener("addtoast", handleAddToast);
     };
   }, [handleAddToast]);
 

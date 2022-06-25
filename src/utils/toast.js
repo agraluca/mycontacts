@@ -1,29 +1,15 @@
+import EventManager from "lib/eventManager";
+
+export const toastEventManager = new EventManager();
+
 export const toast = {
   error: (message) => {
-    const event = new CustomEvent("addtoast", {
-      detail: {
-        type: "error",
-        message,
-      },
-    });
-    document.dispatchEvent(event);
+    toastEventManager.emit("addtoast", { type: "error", message });
   },
   success: (message) => {
-    const event = new CustomEvent("addtoast", {
-      detail: {
-        type: "success",
-        message,
-      },
-    });
-    document.dispatchEvent(event);
+    toastEventManager.emit("addtoast", { type: "success", message });
   },
   default: (message) => {
-    const event = new CustomEvent("addtoast", {
-      detail: {
-        type: "default",
-        message,
-      },
-    });
-    document.dispatchEvent(event);
+    toastEventManager.emit("default", { type: "success", message });
   },
 };
