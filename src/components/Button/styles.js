@@ -40,6 +40,12 @@ export const Button = styled.button`
     font-size: ${theme.font.sizes.medium};
     font-weight: ${theme.font.weight.bold};
     padding: ${theme.spacings.xsmall};
+    height: 5rem;
     transition: background 0.2s ease-in;
+
+    &:disabled {
+      background: ${theme.colors.disabled};
+      cursor: not-allowed;
+    }
   `}
 `;

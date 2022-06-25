@@ -10,12 +10,24 @@ export const ContactsListWrapper = styled.section`
   `}
 `;
 
+const contactsListHeaderModifier = {
+  hasError: () => css`
+    justify-content: flex-end;
+  `,
+  noContacts: () => css`
+    justify-content: center;
+  `,
+};
+
 export const ContactsListHeader = styled.header`
-  ${({ theme }) => css`
+  ${({ theme, hasError, noContacts }) => css`
     display: flex;
     justify-content: space-between;
+    ${!!noContacts && contactsListHeaderModifier.noContacts()}
+    ${!!hasError && contactsListHeaderModifier.hasError()}
     align-items: center;
-
+    border-bottom: 0.1rem solid ${theme.colors.blue.lighter};
+    padding: ${theme.spacings.xsmall};
     .contacts-list__link {
       font-weight: ${theme.font.weight.bold};
       font-size: ${theme.font.sizes.normal};
@@ -34,11 +46,70 @@ export const ContactsListHeader = styled.header`
   `}
 `;
 
+export const ErrorContainer = styled.div`
+  ${({ theme }) => css`
+    margin-top: ${theme.spacings.medium};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: ${theme.spacings.medium};
+  `}
+`;
+
+export const ErrorInfoContainer = styled.div`
+  ${({ theme }) => css`
+    display: flex;
+    flex-direction: column;
+    gap: ${theme.spacings.xsmall};
+  `}
+`;
+export const ErrorTitle = styled.h3`
+  ${({ theme }) => css`
+    color: ${theme.colors.red.main};
+    font-size: ${theme.font.sizes.large};
+    font-weight: ${theme.font.weight.bold};
+  `}
+`;
+
 export const ContactsTotalNumber = styled.h3`
   ${({ theme }) => css`
     font-weight: ${theme.font.weight.bold};
     font-size: ${theme.font.sizes.xlarge};
     color: ${theme.colors.black};
+  `}
+`;
+
+export const EmptyWrapper = styled.div`
+  ${({ theme }) => css`
+    margin-top: ${theme.spacings.medium};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: ${theme.grid.gutter};
+    p {
+      color: ${theme.colors.gray};
+      text-align: center;
+      font-size: ${theme.font.sizes.medium};
+    }
+    strong {
+      color: ${theme.colors.blue.main};
+    }
+  `}
+`;
+
+export const ContactsNotFound = styled.div`
+  ${({ theme }) => css`
+    margin-top: ${theme.spacings.medium};
+    display: flex;
+    align-items: flex-start;
+    gap: ${theme.grid.gutter};
+
+    p {
+      color: ${theme.colors.gray};
+      text-align: center;
+      font-size: ${theme.font.sizes.large};
+      word-break: break-word;
+    }
   `}
 `;
 
@@ -57,7 +128,7 @@ export const ListContainerHeader = styled.header`
 `;
 
 export const OrderButton = styled.button`
-  ${({ theme }) => css`
+  ${({ theme, order }) => css`
     display: flex;
     justify-content: center;
     align-items: center;
@@ -66,6 +137,16 @@ export const OrderButton = styled.button`
     border: none;
     color: ${theme.colors.blue.main};
     font-weight: ${theme.font.weight.bold};
+  `}
+`;
+
+export const OrderIcon = styled.img`
+  ${({ order }) => css`
+    transform: ${order === "desc" ? "rotate(180deg)" : "rotate(0deg)"};
+    transition: all 0.2s ease-in;
+    &:hover {
+      opacity: 0.8;
+    }
   `}
 `;
 

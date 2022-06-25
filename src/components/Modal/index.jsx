@@ -18,6 +18,7 @@ function Modal({
   deleteButtonLabel = "Deletar",
   colorType = "primary",
   handleCancel,
+  handleConfirmDelete,
 }) {
   return createPortal(
     <S.Overlay>
@@ -28,7 +29,11 @@ function Modal({
           <S.CancelButton onClick={handleCancel}>
             {cancelButtonLabel}
           </S.CancelButton>
-          <Button size="normal" colorType={colorType}>
+          <Button
+            size="normal"
+            colorType={colorType}
+            onClick={handleConfirmDelete}
+          >
             {deleteButtonLabel}
           </Button>
         </S.ButtonContainer>

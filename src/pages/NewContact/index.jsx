@@ -1,38 +1,29 @@
 import ContactsForm from "components/ContactsForm";
 import PageHeader from "components/PageHeader";
-import { useState } from "react";
+import ContactsService from "services/contactsService";
+import { toast } from "utils/toast";
 
 import * as S from "./styles";
 
 function NewContact() {
-  const [formValue, setFormValue] = useState({
-    name: "",
-    email: "",
-    telephone: "",
-    social: "Instagram",
-  });
-
-  const handleChange = ({ target: { name, value } }) => {
-    setFormValue((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleSubmit = async (formData) => {
+    try {
+      const valueToSubmit = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        category_id: formData.category,
+      };
+      await ContactsService.createContact(valueToSubmit);
+      toast.success("Contato cadastrado com sucesso!");
+    } catch {
+      toast.error("Ocorreu um erro ao cadastrar o contato!");
+    }
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formValue);
-  };
-
   return (
     <S.Wrapper>
       <PageHeader title="Novo contato" />
-      <ContactsForm
-        buttonLabel="Cadastrar"
-        formValue={formValue}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-      />
+      <ContactsForm buttonLabel="Cadastrar" onSubmit={handleSubmit} />
     </S.Wrapper>
   );
 }

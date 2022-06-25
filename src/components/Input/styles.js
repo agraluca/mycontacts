@@ -28,6 +28,11 @@ export const Input = styled.input`
     outline: 0;
     padding: 0 ${theme.spacings.xsmall};
     font-family: ${theme.font.family};
+    appearance: none;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
 
     &::placeholder {
       color: ${theme.colors.gray};

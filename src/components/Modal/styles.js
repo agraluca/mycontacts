@@ -4,7 +4,7 @@ export const Overlay = styled.div`
   ${({ theme }) => css`
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(0.3rem);
-    position: absolute;
+    position: fixed;
     inset: 0;
     display: flex;
     align-items: center;

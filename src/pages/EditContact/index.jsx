@@ -1,40 +1,40 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+
+import { useParams } from "react-router-dom";
 
 import ContactsForm from "components/ContactsForm";
 import PageHeader from "components/PageHeader";
 
+import ContactsService from "services/contactsService";
+
 import * as S from "./styles";
 
 function EditContact() {
-  const [formValue, setFormValue] = useState({
-    name: "",
-    email: "",
-    telephone: "",
-    social: "Instagram",
-  });
+  const { id } = useParams();
+  const [contact, setContact] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
 
-  const handleChange = ({ target: { name, value } }) => {
-    setFormValue((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const getSingleContact = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const contactInfo = await ContactsService.listContactById(id);
+      setContact(contactInfo);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [id]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formValue);
-  };
+  useEffect(() => {
+    getSingleContact();
+  }, [getSingleContact]);
 
-  const name = "Luca Agra";
+  const name = contact?.name;
   return (
     <S.Wrapper>
       <PageHeader title={`Editar ${name}`} />
-      <ContactsForm
-        buttonLabel="Salvar alterações"
-        formValue={formValue}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-      />
+      <ContactsForm buttonLabel="Salvar alterações" />
     </S.Wrapper>
   );
 }

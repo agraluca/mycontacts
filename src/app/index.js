@@ -3,12 +3,16 @@ import theme from "styles/theme";
 import GlobalStyles from "styles/global";
 
 import Routes from "routes";
+import Toast from "components/Toast";
+
+import "lib/eventManager";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <Routes />
+      <Toast />
     </ThemeProvider>
   );
 }
