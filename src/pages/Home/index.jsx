@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ContactsService from "services/contactsService";
 
 import * as S from "./styles";
+import { toast } from "utils/toast";
 
 function Home() {
   const [modal, setModal] = useState({ isOpen: false, id: null, name: "" });
@@ -34,7 +35,7 @@ function Home() {
   const filteredContacts = useMemo(() => {
     return contacts.filter((contact) => {
       return Object.keys(contact).some((key) => {
-        if (["name", "email", "phone", "category_name"].includes(key)) {
+        if (["name", "email", "phone", "category_name"]?.includes(key)) {
           return contact[key]?.toLowerCase().includes(searchTerm.toLowerCase());
         }
       });
@@ -53,9 +54,16 @@ function Home() {
     setModal({ isOpen: true, id, name });
   };
 
-  const handleConfirmDelete = () => {
-    console.log(`deleted item with id: ${modal.id}`);
-    setModal({ isOpen: false, id: null, name: "" });
+  const handleConfirmDelete = async () => {
+    try {
+      await ContactsService.deleteContact(modal.id);
+      toast.success("Contato deletado com sucesso!");
+    } catch {
+      toast.error("Ocorreu um erro ao deletar o contato!", 4000);
+    } finally {
+      getContacts();
+      setModal({ isOpen: false, id: null, name: "" });
+    }
   };
 
   const handleCancel = () => {
@@ -66,7 +74,6 @@ function Home() {
     try {
       setIsLoading(true);
       const contactsList = await ContactsService.listContacts(order);
-
       setHasError(false);
       setContacts(contactsList);
     } catch (e) {

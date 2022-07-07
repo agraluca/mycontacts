@@ -4,16 +4,24 @@ class ContactsService {
   constructor() {
     this.httpClient = new HttpClient(process.env.REACT_APP_API_URL);
   }
-  async listContacts(orderBy = "asc") {
+  listContacts(orderBy = "asc") {
     return this.httpClient.get(`/contacts?orderBy=${orderBy}`);
   }
-  async listContactById(id) {
+  getContactById(id) {
     return this.httpClient.get(`/contacts/${id}`);
   }
-  async createContact(contact) {
+  createContact(contact) {
     return this.httpClient.post("/contacts", {
       body: contact,
     });
+  }
+  editContact(id, contact) {
+    return this.httpClient.put(`/contacts/${id}`, {
+      body: contact,
+    });
+  }
+  deleteContact(id) {
+    return this.httpClient.delete(`/contacts/${id}`);
   }
 }
 
