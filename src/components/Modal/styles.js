@@ -73,5 +73,8 @@ export const CancelButton = styled.button`
     &:hover {
       border: 0.1rem solid ${theme.colors.gray};
     }
+    &:disabled {
+      cursor: not-allowed;
+    }
   `}
 `;

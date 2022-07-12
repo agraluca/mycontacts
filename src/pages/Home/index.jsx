@@ -22,6 +22,7 @@ import { toast } from "utils/toast";
 function Home() {
   const [modal, setModal] = useState({ isOpen: false, id: null, name: "" });
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeletingLoading, setIsDeletingLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [contacts, setContacts] = useState([]);
   const [order, setOrder] = useState("asc");
@@ -54,20 +55,22 @@ function Home() {
     setModal({ isOpen: true, id, name });
   };
 
+  const handleCloseModal = () => {
+    setModal({ isOpen: false, id: null, name: "" });
+  };
+
   const handleConfirmDelete = async () => {
     try {
+      setIsDeletingLoading(true);
       await ContactsService.deleteContact(modal.id);
       toast.success("Contato deletado com sucesso!");
     } catch {
       toast.error("Ocorreu um erro ao deletar o contato!", 4000);
     } finally {
       getContacts();
-      setModal({ isOpen: false, id: null, name: "" });
+      setIsDeletingLoading(false);
+      handleCloseModal();
     }
-  };
-
-  const handleCancel = () => {
-    setModal({ isOpen: false, id: null, name: "" });
   };
 
   const getContacts = useCallback(async () => {
@@ -76,8 +79,7 @@ function Home() {
       const contactsList = await ContactsService.listContacts(order);
       setHasError(false);
       setContacts(contactsList);
-    } catch (e) {
-      console.error(e);
+    } catch {
       setHasError(true);
     } finally {
       setIsLoading(false);
@@ -95,14 +97,14 @@ function Home() {
   return (
     <S.Wrapper>
       <Loader isLoading={isLoading} />
-      {modal.isOpen && (
-        <Modal
-          handleCancel={handleCancel}
-          colorType="danger"
-          title={`Tem certeza que deseja remover o contato ${modal.name}?`}
-          handleConfirmDelete={handleConfirmDelete}
-        />
-      )}
+      <Modal
+        visible={modal.isOpen}
+        handleCancel={handleCloseModal}
+        colorType="danger"
+        title={`Tem certeza que deseja remover o contato ${modal.name}?`}
+        handleConfirmDelete={handleConfirmDelete}
+        isLoading={isDeletingLoading}
+      />
       {contacts.length > 0 && (
         <Input
           styleType="search"
