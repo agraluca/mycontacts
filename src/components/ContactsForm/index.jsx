@@ -25,6 +25,7 @@ import {
 } from "utils/validateFields";
 
 import * as S from "./styles";
+import useSafeAsyncState from "hooks/useSafeAsyncState";
 
 const ContactsForm = forwardRef(
   ({ buttonLabel = "Cadastrar", onSubmit }, ref) => {
@@ -39,8 +40,9 @@ const ContactsForm = forwardRef(
     );
     const [formValue, setFormValue] = useState(formValueInitialState);
     const { formError, setError, removeError } = useForm();
-    const [categories, setCategories] = useState([]);
-    const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+    const [categories, setCategories] = useSafeAsyncState([]);
+    const [isLoadingCategories, setIsLoadingCategories] =
+      useSafeAsyncState(true);
     const [isSubmiting, setIsSubmiting] = useState(false);
 
     const getCategories = useCallback(async () => {
@@ -53,8 +55,7 @@ const ContactsForm = forwardRef(
       } finally {
         setIsLoadingCategories(false);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [setCategories, setError, setIsLoadingCategories]);
 
     const handleErrorChange = (name, value) => {
       removeError(name);

@@ -11,6 +11,7 @@ import ContactsService from "services/contactsService";
 import { toast } from "utils/toast";
 
 import * as S from "./styles";
+import useSafeAsyncAction from "hooks/useSafeAsyncAction";
 
 function EditContact() {
   const { id } = useParams();
@@ -19,20 +20,26 @@ function EditContact() {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  const safeAsyncAction = useSafeAsyncAction();
+
   const contactFormRef = useRef(null);
 
   const getSingleContact = useCallback(async () => {
     try {
       setIsLoading(true);
       const contactInfo = await ContactsService.getContactById(id);
-      setContactName(contactInfo.name);
-      contactFormRef.current.setFieldsValues(contactInfo);
-      setIsLoading(false);
+      safeAsyncAction(() => {
+        setContactName(contactInfo.name);
+        contactFormRef.current.setFieldsValues(contactInfo);
+        setIsLoading(false);
+      });
     } catch (e) {
-      navigate("/");
-      toast.error("Contato não encontrado!", 4000);
+      safeAsyncAction(() => {
+        navigate("/");
+        toast.error("Contato não encontrado!", 4000);
+      });
     }
-  }, [id, navigate]);
+  }, [id, navigate, safeAsyncAction]);
 
   const handleSubmit = async (formData) => {
     try {

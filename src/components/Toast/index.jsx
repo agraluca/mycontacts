@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { createPortal } from "react-dom";
-
 import ToastMessage from "./ToastMessage";
+import CreatePortalWrapper from "components/CreatePortalWrapper";
 
 import { toastEventManager } from "utils/toast";
 
@@ -31,18 +30,19 @@ export default function Toast() {
     setToastInfo((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
-  return createPortal(
-    <S.Wrapper>
-      {toastInfo.map((toast) => (
-        <ToastMessage
-          key={toast.id}
-          type={toast.type}
-          message={toast.message}
-          duration={toast.duration}
-          handleRemoveToast={() => handleRemoveToast(toast.id)}
-        />
-      ))}
-    </S.Wrapper>,
-    document.querySelector("#toast-root")
+  return (
+    <CreatePortalWrapper selector="toast-root">
+      <S.Wrapper>
+        {toastInfo.map((toast) => (
+          <ToastMessage
+            key={toast.id}
+            type={toast.type}
+            message={toast.message}
+            duration={toast.duration}
+            handleRemoveToast={() => handleRemoveToast(toast.id)}
+          />
+        ))}
+      </S.Wrapper>
+    </CreatePortalWrapper>
   );
 }

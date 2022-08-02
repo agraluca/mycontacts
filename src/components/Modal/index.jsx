@@ -1,5 +1,5 @@
-import { createPortal } from "react-dom";
 import Button from "components/Button";
+import CreatePortalWrapper from "components/CreatePortalWrapper";
 
 import PropTypes from "prop-types";
 
@@ -32,27 +32,28 @@ function Modal({
     return null;
   }
 
-  return createPortal(
-    <S.Overlay>
-      <S.ModalWrapper>
-        <S.ModalTitle colorType={colorType}>{title}</S.ModalTitle>
-        <S.ModalDescription>{description}</S.ModalDescription>
-        <S.ButtonContainer>
-          <S.CancelButton onClick={handleCancel} disabled={isLoading}>
-            {cancelButtonLabel}
-          </S.CancelButton>
-          <Button
-            size="normal"
-            colorType={colorType}
-            onClick={handleConfirmDelete}
-            isSubmiting={isLoading}
-          >
-            {deleteButtonLabel}
-          </Button>
-        </S.ButtonContainer>
-      </S.ModalWrapper>
-    </S.Overlay>,
-    document.getElementById("modal-root")
+  return (
+    <CreatePortalWrapper selector="modal-root">
+      <S.Overlay>
+        <S.ModalWrapper>
+          <S.ModalTitle colorType={colorType}>{title}</S.ModalTitle>
+          <S.ModalDescription>{description}</S.ModalDescription>
+          <S.ButtonContainer>
+            <S.CancelButton onClick={handleCancel} disabled={isLoading}>
+              {cancelButtonLabel}
+            </S.CancelButton>
+            <Button
+              size="normal"
+              colorType={colorType}
+              onClick={handleConfirmDelete}
+              isSubmiting={isLoading}
+            >
+              {deleteButtonLabel}
+            </Button>
+          </S.ButtonContainer>
+        </S.ModalWrapper>
+      </S.Overlay>
+    </CreatePortalWrapper>
   );
 }
 

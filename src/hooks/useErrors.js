@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import useDebounce from "./useDebounce";
 
@@ -10,19 +10,19 @@ export default function useForm() {
     category: "",
   });
 
-  const removeError = (name) => {
+  const removeError = useCallback((name) => {
     setFormError((prev) => ({
       ...prev,
       [name]: "",
     }));
-  };
+  }, []);
 
-  const setError = (name, message) => {
+  const setError = useCallback((name, message) => {
     return setFormError((prev) => ({
       ...prev,
       [name]: message,
     }));
-  };
+  }, []);
 
   const debouncedErrorValue = useDebounce(formError, 500);
 
