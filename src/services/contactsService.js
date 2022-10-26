@@ -1,25 +1,32 @@
 import { delay } from "utils/delay";
+import ContactMapper from "./mappers/contactMapper";
 import HttpClient from "./utils/httpClient";
 
 class ContactsService {
   constructor() {
     this.httpClient = new HttpClient(process.env.REACT_APP_API_URL);
   }
-  listContacts(orderBy = "asc") {
-    return this.httpClient.get(`/contacts?orderBy=${orderBy}`);
+  async listContacts(orderBy = "asc") {
+    const contacts = await this.httpClient.get(`/contacts?orderBy=${orderBy}`);
+
+    return contacts.map((contact) => ContactMapper.toDomain(contact));
   }
   async getContactById(id) {
-    await delay(5000);
-    return this.httpClient.get(`/contacts/${id}`);
+    await delay(2000);
+    const contact = await this.httpClient.get(`/contacts/${id}`);
+
+    return ContactMapper.toDomain(contact);
   }
   createContact(contact) {
+    const body = ContactMapper.toPersistence(contact);
     return this.httpClient.post("/contacts", {
-      body: contact,
+      body,
     });
   }
   editContact(id, contact) {
+    const body = ContactMapper.toPersistence(contact);
     return this.httpClient.put(`/contacts/${id}`, {
-      body: contact,
+      body,
     });
   }
   deleteContact(id) {
