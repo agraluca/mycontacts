@@ -2,6 +2,7 @@ import Button from "components/Button";
 import CreatePortalWrapper from "components/CreatePortalWrapper";
 
 import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
@@ -28,14 +29,29 @@ function Modal({
   handleConfirmDelete,
   isLoading = false,
 }) {
-  if (!visible) {
+  const [shoudRender, setShouldRender] = useState(visible);
+
+  useEffect(() => {
+    let timeoutId;
+    if (visible) {
+      setShouldRender(true);
+    } else {
+      timeoutId = setTimeout(() => {
+        setShouldRender(false);
+      }, 300);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [visible]);
+
+  if (!shoudRender) {
     return null;
   }
 
   return (
     <CreatePortalWrapper selector="modal-root">
-      <S.Overlay>
-        <S.ModalWrapper>
+      <S.Overlay isLeaving={!visible}>
+        <S.ModalWrapper isLeaving={!visible}>
           <S.ModalTitle colorType={colorType}>{title}</S.ModalTitle>
           <S.ModalDescription>{description}</S.ModalDescription>
           <S.ButtonContainer>

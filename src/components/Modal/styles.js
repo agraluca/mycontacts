@@ -1,7 +1,27 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const fadeOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
+
+const scaleIn = keyframes`
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+`;
+
+const scaleOut = keyframes`
+  from { transform: scale(1); }
+  to { transform: scale(0); }
+`;
 
 export const Overlay = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, isLeaving }) => css`
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(0.3rem);
     position: fixed;
@@ -10,11 +30,12 @@ export const Overlay = styled.div`
     align-items: center;
     justify-content: center;
     z-index: ${theme.layers.overlay};
+    animation: ${isLeaving ? fadeOut : fadeIn} 0.3s;
   `}
 `;
 
 export const ModalWrapper = styled.div`
-  ${({ theme }) => css`
+  ${({ theme, isLeaving }) => css`
     display: flex;
     flex-direction: column;
     gap: ${theme.spacings.xxsmall};
@@ -25,6 +46,7 @@ export const ModalWrapper = styled.div`
     width: 100%;
     max-width: 45rem;
     z-index: ${theme.layers.modal};
+    animation: ${isLeaving ? scaleOut : scaleIn} 0.3s;
   `}
 `;
 

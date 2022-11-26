@@ -100,7 +100,7 @@ export const CardAction = styled.div`
 `;
 
 export const ActionButton = styled.button`
-  ${({ theme }) => css`
+  ${() => css`
     background: transparent;
     border: none;
   `}
