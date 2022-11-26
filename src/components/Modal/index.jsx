@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
+
 import Button from "components/Button";
 import CreatePortalWrapper from "components/CreatePortalWrapper";
 
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
 
 import * as S from "./styles";
 
@@ -31,17 +32,14 @@ function Modal({
 }) {
   const [shoudRender, setShouldRender] = useState(visible);
 
+  const handleAnimationEnd = () => {
+    if (!visible) setShouldRender(false);
+  };
+
   useEffect(() => {
-    let timeoutId;
     if (visible) {
       setShouldRender(true);
-    } else {
-      timeoutId = setTimeout(() => {
-        setShouldRender(false);
-      }, 300);
     }
-
-    return () => clearTimeout(timeoutId);
   }, [visible]);
 
   if (!shoudRender) {
@@ -50,7 +48,7 @@ function Modal({
 
   return (
     <CreatePortalWrapper selector="modal-root">
-      <S.Overlay isLeaving={!visible}>
+      <S.Overlay isLeaving={!visible} onAnimationEnd={handleAnimationEnd}>
         <S.ModalWrapper isLeaving={!visible}>
           <S.ModalTitle colorType={colorType}>{title}</S.ModalTitle>
           <S.ModalDescription>{description}</S.ModalDescription>
